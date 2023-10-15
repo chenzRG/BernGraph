@@ -1,7 +1,10 @@
 # Implementation of Paper BEHRNOULLI: A Binary EHR Data Oriented Medication Recommendation System
 
-### Folder Specification
+### Package Dependency
 
+- Please check the requirements.txt
+
+### Folder Specification
 
 ### MIMIC-III
  - data.csv: preprocessed raw data
