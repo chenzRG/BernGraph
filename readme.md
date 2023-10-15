@@ -28,3 +28,7 @@ First, please unzip the data files inside each folder.
  - Training: Run the "run.py" file in each folder.
  - Model parameter: The best parameter will be saved in the folder "/models".
  - Evaluation: Run the "eval.ipynb" file in each folder.
+
+### Train/test baselines
+- COGNet: The code can be found [here](https://github.com/BarryRun/COGNet).
+- Other train/test baseline codes can be found [here](https://github.com/ycq091044/SafeDrug).
