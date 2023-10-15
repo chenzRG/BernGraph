@@ -16,6 +16,7 @@
  - egsage.py: GNN model
 
 ### Run the code
+First, please unzip the data files inside each folder.
  - Training: Run the "run.py" file in each folder.
  - Model parameter: The best parameter will be saved in the folder "/models".
  - Evaluation: Run the "eval.ipynb" file in each folder.
