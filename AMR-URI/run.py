@@ -376,10 +376,10 @@ for i in range(pred_labels.T.shape[0]):
 #         continue
         total_jaccard.append(jaccard_sim(np.where(pred_labels.T[i] == 1)[0], np.where(true_labels_np.T[i] == 1)[0]))
 
-print("总的drug counts:",  np.mean(drug_count))
-print("总的jaccard:",  np.mean(total_jaccard))
-print("总的PRAUC:",  np.mean(total_prc))
-print("总的AUROC:",  np.mean(total_auc))
-print("总的F1:",  np.mean(all_f1))
-print("总的recall:",  np.mean(total_recall))
-print("总的precision:",  np.mean(total_precision))
+print("total drug counts:",  np.mean(drug_count))
+print("total jaccard:",  np.mean(total_jaccard))
+print("total PRAUC:",  np.mean(total_prc))
+print("total AUROC:",  np.mean(total_auc))
+print("total F1:",  np.mean(all_f1))
+print("total recall:",  np.mean(total_recall))
+print("total precision:",  np.mean(total_precision))
