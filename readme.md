@@ -3,6 +3,11 @@
 ### Package Dependency
 
 - Please check the requirements.txt
+- You can create the conda environment and use the requirements.txt file:
+
+```
+pip install -r requirements.txt
+```
 
 ### Folder Specification
 
