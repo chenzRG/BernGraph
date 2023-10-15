@@ -16,12 +16,14 @@ pip install -r requirements.txt
  - label.csv:  Ground truth of recommendation
  - run.py: train BEHRNOULLI
  - egsage.py: GNN model
+ - eval.ipynb: Evaluation file.
 
 ### AME-UIR
  - data.csv: preprocessed raw data
  - label.csv:  Ground truth of recommendation
  - run.py: train BEHRNOULLI
  - egsage.py: GNN model
+ - eval.ipynb: Evaluation file.
 
 ### Run the code
 First, please unzip the data files inside each folder.
