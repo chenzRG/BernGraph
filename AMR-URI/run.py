@@ -225,10 +225,10 @@ for epoch in tqdm(range(num_epochs), desc='Epochs', unit='epoch'):
             loss.backward()
             optimizer.step()
             total_loss += loss.item()
-            # 更新进度条的状态
+
             pbar.set_postfix({'loss': loss.item()})
             pbar.update(1)
-    # 重置进度条
+
     pbar.close()
 
     # Validation phase
@@ -254,10 +254,10 @@ for epoch in tqdm(range(num_epochs), desc='Epochs', unit='epoch'):
 
                 loss = loss_1 + loss_2 + loss_3 + loss_4
                 total_val_loss += loss.item()
-                # 更新进度条的状态
+
                 pbar.set_postfix({'loss': loss.item()})
                 pbar.update(1)
-        # 重置进度条
+
         pbar.close()        
 
     # Print statistics
@@ -277,109 +277,3 @@ with open('train_loss.txt', 'w') as file2:
     for item in train_loss:
         file2.write(str(item) + '\n')
 
-# Load the best model parameters and evaluate on the test set
-gnn_model.load_state_dict(torch.load(os.path.join(model_dir, 'best_gnn_model.pth')))
-mlp_model.load_state_dict(torch.load(os.path.join(model_dir, 'best_mlp_model.pth')))
-
-gnn_model.eval()
-mlp_model.eval()
-
-list_output = []
-list_y = []
-
-with torch.no_grad():
-    with tqdm(total=len(test_loader), desc='Test', unit='batch') as pbar:
-        for data in test_loader:
-            data.to(device)
-
-            x_test, edge_index_test, edge_attr_test, y_test = data.x, data.edge_index, data.edge_attr, data.y
-            x_test = x_test.squeeze().unsqueeze(-1)
-            gnn_output_test = gnn_model(x_test, edge_attr_test, edge_index_test)
-            mlp_output = mlp_model(gnn_output_test.view(-1))
-            
-            list_output.append(mlp_output.cpu().detach())
-            list_y.append(y_test.cpu().detach())
-
-            pbar.update(1)
-    # 重置进度条
-    pbar.close()
-    
-    
-true_labels_np = np.array([tensor.numpy() for tensor in list_y])
-model_outputs_np = np.array([tensor.numpy() for tensor in list_output])
-pred_labels = np.round(model_outputs_np) 
-
-true_labels_np = true_labels_np.T
-model_outputs_np = model_outputs_np.T
-pred_labels = pred_labels.T
-
-from sklearn.metrics import f1_score
-from sklearn.metrics import average_precision_score
-from sklearn.metrics import precision_recall_curve, auc
-
-def metrics(true_labels,predicted_labels):
-    TP = 0
-    FP = 0
-    FN = 0
-
-    # 计算 TP、FP 和 FN
-    for true_label, predicted_label in zip(true_labels, predicted_labels):
-        if true_label == 1 and predicted_label == 1:
-            TP += 1
-        elif true_label == 0 and predicted_label == 1:
-            FP += 1
-        elif true_label == 1 and predicted_label == 0:
-            FN += 1
-
-    # 计算 Precision 和 Recall
-    precision = TP / (TP + FP+1e-9)
-    recall = TP / (TP + FN +1e-9)
-
-    return precision, recall
-    
-all_f1 = []
-total_prc = []
-total_auc = []
-total_recall = []
-total_precision = []
-drug_count = []
-
-for index in range(pred_labels.shape[0]):
-    drug_count.append(np.sum(pred_labels[index]==1))
-for i in range(pred_labels.shape[0]):
-#     if np.all(true_labels_np.T[i] !=0):
-    precision,recall = metrics(true_labels_np[i],pred_labels[i])
-    total_recall.append(recall)
-    total_precision.append(precision)
-    prc = average_precision_score(true_labels_np[i],model_outputs_np[i], average='macro')
-    total_prc.append(prc)
-    f1 = f1_score(true_labels_np[i], pred_labels[i], average='macro')
-    all_f1.append(f1)
-    auc = roc_auc_score(true_labels_np[i],model_outputs_np[i])
-    total_auc.append(auc)
-    
-
-def jaccard_sim(a, b):
-    unions = len(set(a).union(set(b)))
-    intersections = len(set(a).intersection(set(b)))
-    return intersections / unions
-
-drug_count = []
-total_jaccard=[]
-for index in range(pred_labels.T.shape[0]):
-    drug_count.append(np.sum(pred_labels.T[index]==1))
-for i in range(pred_labels.T.shape[0]):
-    if np.all(true_labels_np.T[i] !=0):
-    #     if np.all(true_labels_np[i] != 0):
-#         if np.all(true_labels_np[i] != 1):
-#         total_auc.append(0)
-#         continue
-        total_jaccard.append(jaccard_sim(np.where(pred_labels.T[i] == 1)[0], np.where(true_labels_np.T[i] == 1)[0]))
-
-print("total drug counts:",  np.mean(drug_count))
-print("total jaccard:",  np.mean(total_jaccard))
-print("total PRAUC:",  np.mean(total_prc))
-print("total AUROC:",  np.mean(total_auc))
-print("total F1:",  np.mean(all_f1))
-print("total recall:",  np.mean(total_recall))
-print("total precision:",  np.mean(total_precision))
