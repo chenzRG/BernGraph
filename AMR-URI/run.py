@@ -130,24 +130,23 @@ class MultiTaskMLP(nn.Module):
     def forward(self, x):
         return self.layers(x)
     
-proportions, matrix_x, edge_list = generate_graph(raw_data_matrix)
-# np.save('proportions.npy',proportions)
-# np.save('matrix_x.npy',matrix_x)
-#proportions = np.load('proportions.npy')
-#matrix_x = np.load('matrix_x_complicated.npy')
-edge_list = list(combinations(range(raw_data_matrix.shape[1]), 2))
-graph_data = create_data_object(None, proportions, matrix_x, edge_list)
+train_proportions, train_matrix_x, train_edge_list = generate_graph(train_data)
+valid_proportions, valid_matrix_x, valid_edge_list = generate_graph(valid_data)
+test_proportions, test_matrix_x, test_edge_list = generate_graph(test_data)
 
-# Define the datasets
-train_dataset = GraphDataset(train_data, train_labels, proportions, matrix_x, edge_list, graph_data)
-valid_dataset = GraphDataset(valid_data, valid_labels, proportions, matrix_x, edge_list, graph_data)
-test_dataset  = GraphDataset(test_data,  test_labels,  proportions, matrix_x, edge_list, graph_data)
 
+train_graph_data = create_data_object(None, train_proportions, train_matrix_x, train_edge_list)
+valid_graph_data = create_data_object(None, valid_proportions, valid_matrix_x, valid_edge_list)
+test_graph_data = create_data_object(None, test_proportions, test_matrix_x, test_edge_list)
+
+
+train_dataset = GraphDataset(train_data, train_labels, train_proportions, train_matrix_x, train_edge_list, train_graph_data)
+valid_dataset = GraphDataset(valid_data, valid_labels, valid_proportions, valid_matrix_x, valid_edge_list, valid_graph_data)
+test_dataset  = GraphDataset(test_data,  test_labels,  test_proportions, test_matrix_x, test_edge_list, test_graph_data)
 # Define the data loaders
 train_loader = DataLoader(train_dataset, batch_size=1, shuffle=True)
 valid_loader = DataLoader(valid_dataset, batch_size=1, shuffle=False)
 test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False)
-
 # Define GNN model
 gnn_input_dim = 1
 gnn_output_dim = 1
