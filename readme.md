@@ -18,7 +18,7 @@ pip install -r requirements.txt
  - egsage.py: GNN model
  - eval.ipynb: Evaluation file.
 
-### AME-UIR
+### AMR-URI
  - data.csv: preprocessed raw data
  - label.csv:  Ground truth of recommendation
  - run.py: train BEHRNOULLI
