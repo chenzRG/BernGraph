@@ -1,4 +1,4 @@
-# Implementation of Paper BEHRNOULLI: A Binary EHR Data Oriented Medication Recommendation System
+# Implementation of Paper BernGraph: Probabilistic Graph Neural Networks for EHR-based Medication Recommendations
 
 ### Package Dependency
 
@@ -14,14 +14,14 @@ pip install -r requirements.txt
 ### MIMIC-III
  - data.csv: preprocessed raw data
  - label.csv:  Ground truth of recommendation
- - run.py: train BEHRNOULLI
+ - run.py: train BernGraph
  - egsage.py: GNN model
  - eval.ipynb: Evaluation file.
 
 ### AMR-URI
  - data.csv: preprocessed raw data
  - label.csv:  Ground truth of recommendation
- - run.py: train BEHRNOULLI
+ - run.py: train BernGraph
  - egsage.py: GNN model
  - eval.ipynb: Evaluation file.
 
