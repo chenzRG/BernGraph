@@ -1,4 +1,4 @@
-# Implementation of Paper BernGraph: Probabilistic Graph Neural Networks for EHR-based Medication Recommendations
+# Implementation of BernGraph: Probabilistic Graph Neural Networks for EHR-based Medication Recommendations
 
 ### Package Dependency
 
